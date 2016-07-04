@@ -61,10 +61,11 @@ class MockBytecodeGenerator {
                       .load(new MultipleParentClassLoader.Builder()
                               .append(features.mockedType)
                               .append(features.interfaces)
-                              .append(MultipleParentClassLoader.class.getClassLoader())
                               .append(Thread.currentThread().getContextClassLoader())
-                              .filter(isBootstrapClassLoader())
-                              .build(), ClassLoadingStrategy.Default.INJECTION)
+                              .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
+                              .append(MockMethodInterceptor.class,
+                                      MockMethodInterceptor.ForHashCode.class,
+                                      MockMethodInterceptor.ForEquals.class).build(), ClassLoadingStrategy.Default.INJECTION)
                       .getLoaded();
     }
 

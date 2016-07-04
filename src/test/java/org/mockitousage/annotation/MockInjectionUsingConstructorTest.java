@@ -25,10 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -98,7 +95,7 @@ public class MockInjectionUsingConstructorTest {
     public static class junit_test_with_3_tests_methods {
         private static int constructor_instantiation = 0;
 
-        @Mock List some_collaborator;
+        @Mock List<?> some_collaborator;
         @InjectMocks some_class_with_parametered_constructor should_be_initialized_3_times;
 
         @Test public void test_1() { }
@@ -106,21 +103,21 @@ public class MockInjectionUsingConstructorTest {
         @Test public void test_3() { }
 
         private static class some_class_with_parametered_constructor {
-            public some_class_with_parametered_constructor(List collaborator) {
+            public some_class_with_parametered_constructor(List<?> collaborator) {
                 constructor_instantiation++;
             }
         }
     }
 
     private static class FailingConstructor {
-        FailingConstructor(Set set) {
+        FailingConstructor(Set<?> set) {
             throw new IllegalStateException("always fail");
         }
     }
 
     @Ignore("don't run this code in the test runner")
     private static class ATest {
-        @Mock Set set;
+        @Mock Set<?> set;
         @InjectMocks FailingConstructor failingConstructor;
     }
 

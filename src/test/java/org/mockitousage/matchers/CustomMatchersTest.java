@@ -5,9 +5,6 @@
 
 package org.mockitousage.matchers;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
@@ -15,34 +12,35 @@ import org.mockito.Mockito;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 public class CustomMatchersTest extends TestBase {
     
     private final class ContainsFoo implements ArgumentMatcher<String> {
-        public boolean matches(Object arg) {
-            return ((String) arg).contains("foo");
+        public boolean matches(String arg) {
+            return arg.contains("foo");
         }
     }
 
     private final class IsAnyBoolean implements ArgumentMatcher<Boolean> {
-        public boolean matches(Object arg) {
+        public boolean matches(Boolean arg) {
             return true;
         }
     }
     
     private final class IsSorZ implements ArgumentMatcher<Character> {
-        public boolean matches(Object arg) {
-            Character character = (Character) arg;
+        public boolean matches(Character character) {
             return character.equals('s') || character.equals('z');
         }
     }
 
     private final class IsZeroOrOne<T extends Number> implements ArgumentMatcher<T> {
-        public boolean matches(Object arg) {
-            Number number = (Number) arg;
-            if (number.intValue() == 0 || number.intValue() == 1) {
-                return true;
-            }
-            return false;
+        public boolean matches(T number) {
+            return number.intValue() == 0 || number.intValue() == 1;
         }
     }
 
@@ -137,8 +135,7 @@ public class CustomMatchersTest extends TestBase {
     }
     
     private final class StringThatContainsXxx implements ArgumentMatcher<String> {
-        public boolean matches(Object argument) {
-            String arg = (String) argument;
+        public boolean matches(String arg) {
             return arg.contains("xxx");
         }
     }

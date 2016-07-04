@@ -6,11 +6,7 @@ package org.mockitousage;
 
 import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class MethodsImpl implements IMethods {
     public boolean booleanReturningMethod() {
@@ -246,6 +242,14 @@ public class MethodsImpl implements IMethods {
     }
 
     public Object threeArgumentMethod(int valueOne, Object valueTwo, String valueThree) {
+        return null;
+    }
+
+    public String threeArgumentMethodWithStrings(int valueOne, String valueTwo, String valueThree) {
+        return null;
+    }
+
+    public String fourArgumentMethod(int valueOne, String valueTwo, String valueThree, boolean[] array) {
         return null;
     }
 

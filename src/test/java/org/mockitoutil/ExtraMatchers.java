@@ -5,7 +5,8 @@
 
 package org.mockitoutil;
 
-import static org.junit.Assert.*;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -13,8 +14,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matcher;
+import static org.junit.Assert.*;
 
 @SuppressWarnings("unchecked")
 public class ExtraMatchers {
@@ -77,9 +77,9 @@ public class ExtraMatchers {
         return new Assertor<Object>() {
 
             public void assertValue(Object o) {
-                Class clazz = null;
+                Class<?> clazz = null;
                 if (o instanceof Class) {
-                    clazz = (Class) o;
+                    clazz = (Class<?>) o;
                 } else {
                     clazz = o.getClass();
                 }
@@ -133,11 +133,11 @@ public class ExtraMatchers {
         };
     }
     
-    public static org.hamcrest.Matcher<java.lang.Object> clazz(java.lang.Class<?> type) {
-        return CoreMatchers.isA((Class) type);
+    public static org.hamcrest.Matcher<Object> clazz(Class<?> type) {
+        return CoreMatchers.instanceOf(type);
     }
 
-    public static Assertor hasMethodsInStackTrace(final String ... methods) {
+    public static Assertor<Throwable> hasMethodsInStackTrace(final String ... methods) {
         return new Assertor<Throwable>() {
             public void assertValue(Throwable value) {
                 StackTraceElement[] trace = value.getStackTrace();

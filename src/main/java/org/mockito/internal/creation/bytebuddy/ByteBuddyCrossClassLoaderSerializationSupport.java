@@ -8,6 +8,8 @@ package org.mockito.internal.creation.bytebuddy;
 import static org.mockito.internal.creation.bytebuddy.MockFeatures.withMockFeatures;
 import static org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.*;
 import static org.mockito.internal.util.StringJoiner.join;
+import static org.mockito.internal.util.reflection.FieldSetter.setField;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -165,7 +167,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
 
         private static final long serialVersionUID = -7600267929109286514L;
         private final byte[] serializedMock;
-        private final Class typeToMock;
+        private final Class<?> typeToMock;
         private final Set<Class<?>> extraInterfaces;
 
         /**
@@ -186,7 +188,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
             objectOutputStream.close();
             out.close();
 
-            MockCreationSettings mockSettings = new MockUtil().getMockSettings(mockitoMock);
+            MockCreationSettings<?> mockSettings = new MockUtil().getMockSettings(mockitoMock);
             this.serializedMock = out.toByteArray();
             this.typeToMock = mockSettings.getTypeToMock();
             this.extraInterfaces = mockSettings.getExtraInterfaces();
@@ -245,10 +247,10 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
      * </p>
      */
     public static class MockitoMockObjectInputStream extends ObjectInputStream {
-        private final Class typeToMock;
+        private final Class<?> typeToMock;
         private final Set<Class<?>> extraInterfaces;
 
-        public MockitoMockObjectInputStream(InputStream in, Class typeToMock, Set<Class<?>> extraInterfaces) throws IOException {
+        public MockitoMockObjectInputStream(InputStream in, Class<?> typeToMock, Set<Class<?>> extraInterfaces) throws IOException {
             super(in);
             this.typeToMock = typeToMock;
             this.extraInterfaces = extraInterfaces;
@@ -305,7 +307,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
         private void hackClassNameToMatchNewlyCreatedClass(ObjectStreamClass descInstance, Class<?> proxyClass) throws ObjectStreamException {
             try {
                 Field classNameField = descInstance.getClass().getDeclaredField("name");
-                new FieldSetter(descInstance, classNameField).set(proxyClass.getCanonicalName());
+                setField(descInstance, classNameField,proxyClass.getCanonicalName());
             } catch (NoSuchFieldException nsfe) {
                 throw new MockitoSerializationIssue(join(
                         "Wow, the class 'ObjectStreamClass' in the JDK don't have the field 'name',",

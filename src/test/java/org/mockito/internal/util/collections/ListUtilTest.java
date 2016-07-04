@@ -13,16 +13,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static junit.framework.TestCase.assertTrue;
 import static org.mockitoutil.ExtraMatchers.hasExactlyInOrder;
 
-@SuppressWarnings("unchecked")
 public class ListUtilTest extends TestBase {
 
     @Test
     public void shouldFilterList() throws Exception {
-        List list = asList("one", "x", "two", "x", "three");
-        List filtered = ListUtil.filter(list, new Filter() {
-            public boolean isOut(Object object) {
+        List<String> list = asList("one", "x", "two", "x", "three");
+        List<String> filtered = ListUtil.filter(list, new Filter<String>() {
+            public boolean isOut(String object) {
                 return object == "x";
             }
         });
@@ -32,8 +32,8 @@ public class ListUtilTest extends TestBase {
     
     @Test
     public void shouldReturnEmptyIfEmptyListGiven() throws Exception {
-        List list = new LinkedList();
-        List filtered = ListUtil.filter(list, null);
+        List<Object> list = new LinkedList<Object>();
+        List<Object> filtered = ListUtil.filter(list, null);
         assertTrue(filtered.isEmpty());
     }
 }

@@ -5,7 +5,6 @@
 
 package org.mockitoutil;
 
-import junit.framework.Assert;
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
@@ -27,6 +26,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.mock;
  * valid state for all tests.
  */
 @SuppressWarnings("unchecked")
-public class TestBase extends Assert {
+public class TestBase {
 
     @After
     public void cleanUpConfigInAnyCase() {
@@ -142,7 +143,7 @@ public class TestBase extends Assert {
     }
     
     protected static Invocation invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
-        Class[] types = new Class[args.length];
+        Class<?>[] types = new Class<?>[args.length];
         for (int i = 0; i < args.length; i++) {
             types[i] = args[i].getClass();
         }
@@ -152,7 +153,7 @@ public class TestBase extends Assert {
 
     protected static Invocation invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {
         return new InvocationImpl(new Object(), new SerializableMethod(type.getMethod(methodName,
-                new Class[0])), new Object[0], 1, realMethod, new LocationImpl());
+                new Class<?>[0])), new Object[0], 1, realMethod, new LocationImpl());
     }
 
     protected static Invocation invocationAt(String location) {

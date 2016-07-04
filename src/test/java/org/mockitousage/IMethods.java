@@ -6,11 +6,7 @@ package org.mockitousage;
 
 import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public interface IMethods {
 
@@ -131,6 +127,10 @@ public interface IMethods {
     String simpleMethod(String one, String[] two);
 
     Object threeArgumentMethod(int valueOne, Object valueTwo, String valueThree);
+
+    String threeArgumentMethodWithStrings(int valueOne, String valueTwo, String valueThree);
+
+    String fourArgumentMethod(int valueOne, String valueTwo, String valueThree, boolean[] array);
 
     void twoArgumentMethod(int one, int two);
 

@@ -5,14 +5,14 @@
 
 package org.mockito.internal.verification;
 
+import static org.mockito.exceptions.Reporter.wantedAtMostX;
+import static org.mockito.internal.invocation.InvocationMarker.markVerified;
+import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
+
 import java.util.Iterator;
 import java.util.List;
-
-import org.mockito.exceptions.Reporter;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.InvocationMarker;
-import org.mockito.internal.invocation.InvocationsFinder;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
@@ -20,7 +20,6 @@ import org.mockito.verification.VerificationMode;
 public class AtMost implements VerificationMode {
 
     private final int maxNumberOfInvocations;
-    private final InvocationMarker invocationMarker = new InvocationMarker();
 
     public AtMost(int maxNumberOfInvocations) {
         if (maxNumberOfInvocations < 0) {
@@ -33,15 +32,14 @@ public class AtMost implements VerificationMode {
         List<Invocation> invocations = data.getAllInvocations();
         InvocationMatcher wanted = data.getWanted();
         
-        InvocationsFinder finder = new InvocationsFinder();
-        List<Invocation> found = finder.findInvocations(invocations, wanted);
+        List<Invocation> found = findInvocations(invocations, wanted);
         int foundSize = found.size();
         if (foundSize > maxNumberOfInvocations) {
-            new Reporter().wantedAtMostX(maxNumberOfInvocations, foundSize);
+            throw wantedAtMostX(maxNumberOfInvocations, foundSize);
         }
 
         removeAlreadyVerified(found);
-        invocationMarker.markVerified(found, wanted);
+        markVerified(found, wanted);
     }
 
     @Override
